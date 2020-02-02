@@ -1,17 +1,19 @@
 type ('a, 'b) t
 
-val return : 'a -> ('a, 'b) t
+val return : 'a -> ('a, 's) t
 
-val map : ('a -> 'b -> 'c) -> ('a, 'b) t -> ('c, 'b) t
+val map : ('a -> 'b) -> ('a, 's) t -> ('b, 's) t
 
-val (>|=) : ('a, 'b) t -> ('a -> 'b -> 'c) -> ('c, 'b) t
+val (let+) : ('a, 's) t -> ('a -> 'b) -> ('b, 's) t
 
-val bind : ('a -> 'b -> ('c, 'b) t) -> ('a, 'b) t -> ('c, 'b) t
+val bind : ('a -> ('b, 's) t) -> ('a, 's) t -> ('b, 's) t
 
-val (let*) : ('a -> 'b -> ('c, 'b) t) -> ('a, 'b) t -> ('c, 'b) t
+val (>>=) : ('a, 's) t -> ('a -> ('b, 's) t) -> ('b, 's) t
 
-val (>>=) : ('a, 'b) t -> ('a -> 'b -> ('c, 'b) t) -> ('c, 'b) t
+val (let*): ('a, 's) t -> ('a -> ('b, 's) t) -> ('b, 's) t
 
-val put : 'a -> (unit, 'a) t
+val put : 's -> (unit, 's) t
 
-val run : ('a, 'b) t -> 'b -> 'a
+val get : unit -> ('s, 's) t
+
+val run_state : ('a, 's) t -> 's -> 'a
